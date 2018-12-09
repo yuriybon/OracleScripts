@@ -73,4 +73,3 @@ BEGIN
 END;
 /
 
---select * from EMPLOYEES2;
