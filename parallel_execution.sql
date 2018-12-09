@@ -73,3 +73,4 @@ BEGIN
 END;
 /
 
+https://oracle-base.com/articles/11g/dbms_parallel_execute_11gR2
