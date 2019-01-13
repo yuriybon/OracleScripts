@@ -12,9 +12,9 @@ begin
   if list_ids.count = 0 then
       dbms_output.put_line('list_ids count = 0');
   else
-     insert into TMP_EMP_DETAILS_VIEW 
+     --insert into TMP_EMP_DETAILS_VIEW 
       select V.* 
-      --bulk collect into list_from_view_nt
+      bulk collect into list_from_view_nt
       from EMP_DETAILS_VIEW  V
       where department_id in (
      select /*+ FIRST_ROWS DYNAMIC_SAMPLING (t 2) */ to_number(column_value) dept_id 
@@ -28,8 +28,9 @@ end;
 
 
 /* dynamic SQL */
+/* dynamic SQL */
 create or replace procedure exec_dynamic as
- v_sql varchar2(4000) := 'insert into TMP_EMP_DETAILS_VIEW  select V.* from EMP_DETAILS_VIEW  V where department_id in (';
+ v_sql varchar2(4000) := 'select V.* from EMP_DETAILS_VIEW  V where department_id in (';
  
  v_list_ids varchar2(4000);
  
@@ -52,16 +53,9 @@ begin
   end; 
   
   execute immediate v_sql ||v_list_ids||') ' ;
---  open v_cursor for v_sql ||v_list_ids||') ';
---  loop
---   fetch v_cursor into v_tmp;
---   exit when v_cursor%notfound;
---   list_from_view_nt.extend(1);
---   list_from_view_nt(list_from_view_nt.last) := v_tmp;
---  end loop;
---   if v_cursor%isopen then
---    close v_cursor;
---   end if; 
+  open v_cursor for v_sql ||v_list_ids||') ';
+  fetch v_cursor bulk collect into list_from_view_nt;
+  close v_cursor;
  end loop;
 end;
 /
