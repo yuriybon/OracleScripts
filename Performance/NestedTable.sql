@@ -28,7 +28,6 @@ end;
 
 
 /* dynamic SQL */
-/* dynamic SQL */
 create or replace procedure exec_dynamic as
  v_sql varchar2(4000) := 'select V.* from EMP_DETAILS_VIEW  V where department_id in (';
  
